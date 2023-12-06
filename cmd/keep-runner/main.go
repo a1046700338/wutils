@@ -26,6 +26,8 @@ var (
 		Parallel struct {
 			Dsg bool
 			Ol  bool
+			// 增加一个终止命令^^
+			sl bool
 		}
 
 		Dsg struct {
@@ -40,6 +42,7 @@ var (
 				Opacity byte
 			}
 		}
+		sl struct {}
 	}{}
 
 	app = &cli.App{
@@ -107,6 +110,17 @@ var (
 				},
 			},
 			{
+				Name:    "sl",
+				Aliases: []string{""},
+				Usage: "Stop Listener\n" +
+					"终止程序进程\n" +
+					"使其透明化恢复初始",
+				Action: func(cCtx *cli.Context) (err error) {
+					sl()
+					return err
+				}
+			},
+			{
 				Name:    "config",
 				Aliases: []string{""},
 				Usage:   "print config file",
@@ -164,6 +178,22 @@ func ol() {
 		})
 		time.Sleep(time.Second * time.Duration(config.Ol.Delay))
 	}
+}
+
+// Terminate the Opacity Listener operation to make the window transparent and restore its initial state
+func sl() {
+    // Iterate through all windows
+    windows := os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
+        IgnoreNoTitled:  true,
+        IgnoreInvisible: true,
+    })
+    for _, window := range windows {
+        // Restore window to opaque
+        isSuccess := os2.SetWindowOpacity(window.Handle, initialOpacity)
+        if !isSuccess {
+            logger.Println("Unable to restore the initialization state of the window", window.Title)
+        }
+    }
 }
 
 func refreshConfig() {

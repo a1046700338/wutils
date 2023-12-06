@@ -10,4 +10,5 @@ func Test_ol(t *testing.T) {
 	time.Sleep(500)
 
 	ol()
+	sl()
 }
