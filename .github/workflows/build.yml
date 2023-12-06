@@ -23,8 +23,8 @@ jobs:
             goos: windows
     steps:
       - uses: actions/checkout@v3
-      #      - uses: Weidows/go-release-action@feature/multi-binaries
-      - uses: a1046700338/wutils@master
+      #      - uses: wangyoucao577/go-release-action@v1
+      - uses: Weidows/go-release-action@feature/multi-binaries
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
